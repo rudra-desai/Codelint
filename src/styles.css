@@ -1,0 +1,18 @@
+@font-face {
+  font-family: 'proxima-nova';
+  src: url('/static/proximaNova.ttf');
+}
+* {
+    transition: ease all .5s;
+}
+.App {
+    text-align: center;
+    height: 100%;
+}
+
+html, body {
+    height: 98%;
+    font-family: proxima-nova;
+    margin: 0;
+    padding: 0;
+}
