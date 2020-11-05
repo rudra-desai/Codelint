@@ -26,7 +26,7 @@ def main():
 def on_connect():
     print(f"{request.sid} connected")
     socketio.emit('test', {
-        'message': 'Got the message from Server!'
+        'message': 'Server is up!'
     })
 
 
