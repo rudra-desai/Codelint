@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "ace-builds": "^1.4.12",
     "file-loader": "^6.1.0",
+    "file-saver": "^2.0.2",
     "html-react-parser": "^0.14.0",
     "random-username-generator": "^1.0.4",
     "react": "^16.13.1",
+    "react-ace": "^9.2.0",
     "react-dom": "^16.13.1",
     "react-scroll": "^1.8.1",
     "socket.io-client": "^2.3.1",
