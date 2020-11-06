@@ -1,12 +1,59 @@
 .App {
-  text-align: left;
+  text-align: left; 
+}
+h1 {
+  position: relative;
+  left: 204px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+select
+{
+  position: relative;
+  left: 1265px;
+}
+.checkboxes{
+  position: relative;
+  left: 204px;
+}
+.checkbox2{
+  position: relative;
+  left: 204px;
 }
 
+.checkbox3{
+  position: relative;
+  left: 204px;
+}
+.checkbox4{
+  position: relative;
+  left: 204px;
+}
+.checkbox5{
+  position: relative;
+  left: 204px;
+}
+.LintButton
+{
+  position: relative;
+  left: 1570px;
+}
+
+.whitespace2
+{
+  position: relative;
+  left: 2564px;
+}
+
+.textarea{
+  vertical-align: center;
+  text-align: center;
+}
+
+.inputs{
+  text-align: center;
+  justify-content: center;
+  vertical-align: center;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -16,7 +63,7 @@
 
 .App-header {
   background-color: #FFFFFF;
-  min-height: 50vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   vertical-align: top;
