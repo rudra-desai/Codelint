@@ -14,9 +14,6 @@ database_url = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-github_id = os.getenv('GITHUB_CLIENT_ID')
-github_secret = os.getenv('GITHUB_CLIENT_SECRET')
-
 db = SQLAlchemy(app)
 db.app = app
 
