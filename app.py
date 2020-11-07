@@ -1,5 +1,6 @@
 import os
 import flask
+import subprocess
 import flask_socketio
 from flask import request
 from dotenv import load_dotenv
@@ -29,6 +30,12 @@ def on_connect():
         'message': 'Server is up!'
     })
 
+@socketio.on('lint')
+def code(data):
+    linter = data['linter']
+    code = data['code']
+    file_name = data['uuid']
+    file = ''
 
 if __name__ == '__main__':
     import models
