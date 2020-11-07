@@ -1,0 +1,44 @@
+name: Run unit tests and deploy to Heroku
+
+on: [pull_request]
+
+jobs:
+  heroku:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-versions: '11.x'
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8.2'
+
+      - name: Install packages from requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run unmocked tests
+        run: |
+          python ./tests/unmocked_unit_tests.py
+
+      - name: Run mocked tests
+        run: |
+          python ./tests/mocked_unit_tests.py
+
+      - name: Automatically Deploy
+        env:
+          HEROKU_API_TOKEN: ${{ secrets.HEROKU_API_TOKEN }}
+          HEROKU_APP_NAME: "codelint"
+        if: github.ref == 'refs/heads/master' && job.status == 'success'
+        run: |
+          npm build
+          npm install -g heroku
+          git push https://heroku:$HEROKU_API_TOKEN@git.heroku.com/$HEROKU_APP_NAME.git refs/remotes/origin/master:refs/heads/master
