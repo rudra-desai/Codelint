@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import AceEditor from 'react-ace';
 import Socket from './Socket'
+import parse from 'html-react-parser';
 import Dropdown from 'react-dropdown';
 import { v4 as uuidv4 } from 'uuid';
 import 'react-dropdown/style.css';
@@ -15,11 +16,17 @@ let socket;
 export default function App() {
     const [code, setCode] = useState('')
     const [linter, setLinter] = useState('')
+    const [errors, setErrors] = useState('')
      useEffect(() => {
          socket = Socket();
 
          socket.on('test', (data) => {
                 console.log(data)
+         })
+
+         socket.on('output', ({linter, output}) => {
+             console.log(output)
+             setErrors(parse(output))
          })
 
          return () => {
@@ -66,6 +73,10 @@ export default function App() {
                 }}
             />
             <input type="submit" onClick={handleClick}/>
+            <br />
+            <div className="errors">
+                {errors}
+            </div>
         </div>
     );
 }
