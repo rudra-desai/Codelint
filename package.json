@@ -32,6 +32,7 @@
   "scripts": {
     "start": "python app.py",
     "dev": "webpack-dev-server --mode development --open --hot",
+    "watch": "webpack --progress -d --config webpack.config.js --watch",
     "build": "webpack --mode production"
   }
 }
