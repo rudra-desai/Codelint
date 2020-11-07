@@ -34,8 +34,34 @@ def on_connect():
 def code(data):
     linter = data['linter']
     code = data['code']
-    file_name = data['uuid']
+    filename = data['uuid'] + ('.py' if linter == 'pylint' else '.js')
     file = ''
+
+    # get the current script path.
+    here = os.path.dirname(os.path.realpath(__file__))
+    subdir = "userfiles"
+
+    filepath = os.path.join(here, subdir, filename)
+    file = open(filepath, "w")
+    file.write(code)
+    file.close()
+
+    if linter == 'eslint':
+        result = subprocess.run([linter, '-f', 'html', '--fix', f'./userfiles/{filename}'],
+                                stdout=subprocess.PIPE)
+
+        socketio.emit('output', {
+            'linter': linter,
+            'output': result.stdout.decode("utf-8")
+        }, room=request.sid)
+
+        subprocess.run(['rm', f'./userfiles/{filename}'])
+
+
+
+
+
+
 
 if __name__ == '__main__':
     import models
