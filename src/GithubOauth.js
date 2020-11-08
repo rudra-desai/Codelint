@@ -8,8 +8,8 @@ export default function GithubOauth() {
         Socket.emit('store state', {
             'state': state
         });
-        window.location = 'https://github.com/login/oauth/authorize?client_id=862222f107a099fa6750&redirect_uri=' +
-            'http://localhost:8083/&state=' + state + '&scope=repo';
+        window.location = 'https://github.com/login/oauth/authorize?client_id=b1cf50b0666d4c956c2e&redirect_uri=' +
+            'https://b5212afbd02a410697a8708bdded4bf3.vfs.cloud9.us-east-1.amazonaws.com/&state=' + state + '&scope=repo';
     }
     
     return (

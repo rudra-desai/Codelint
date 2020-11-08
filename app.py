@@ -3,10 +3,11 @@ import re
 import flask
 import subprocess
 import flask_socketio
-from flask import request
+import models
+from flask import request, session, escape
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
-from githubOauth import get_auth_token
+from githubOauth import auth_user, get_user_data, get_user_repos, get_user_repo_tree
 
 load_dotenv()
 app = flask.Flask(__name__)
@@ -14,6 +15,7 @@ app = flask.Flask(__name__)
 database_url = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.secret_key = os.getenv('APP_SECRET')
 
 db = SQLAlchemy(app)
 db.app = app
@@ -32,7 +34,17 @@ def on_connect():
     socketio.emit('test', {
         'message': 'Server is up!'
     })
-    
+
+@socketio.on('is logged in')
+def on_is_logged_in():
+    if 'user_id' in session:
+        user_id = escape(session['user_id'])
+        # if user_id in db:
+        #     user_info = db call
+        #     socketio.emit('is logged in', {'logged_in': True, 'user_info': user_info}, request.sid)
+    else:
+        socketio.emit('is logged in', {'logged_in': False}, request.sid)
+
 @socketio.on('store state')
 def on_store_state(data):
     states.add(data['state'])
@@ -43,10 +55,18 @@ def on_auth_user(data):
     state = data['state']
     if state not in states:
         print('state: ', state, ' does not match any waiting states')
-        return
     else:
-        get_auth_token(code, state)
+        auth_user(code, state)
+        socketio.emit('user data', get_user_data(session['user_id']))
         
+@socketio.on('get repos')
+def on_get_user_repos():
+    socketio.emit('repos', get_user_repos(session['user_id']), request.sid)
+    
+@socketio.on('get repo tree')
+def on_get_user_repo_tree(data):
+    socketio.emit('repo tree', get_user_repo_tree(session['user_id'], data['repo_url']), request.sid)
+
 @socketio.on('lint')
 def code(data):
     linter = data['linter']
