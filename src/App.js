@@ -2,12 +2,22 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <h1>EZLint <select name="cars" id="cars"> <option disabled selected value> --Choose a Linter-- </option><option>Pylint</option> <option value="audi">ESLint</option> </select></h1>
+      <div class="topnav">
+        <a class="active" href="#home">Home</a>
+        <a href="#news">News</a>
+        <a href="#contact">Contact</a>
+        <a href="#about">About</a>
+        <div className="github">
+      <button type="button">Link with Github</button> <button type="button">Link with Google</button> 
+      </div>
+      </div>
+      <h1>EZLint <select name="Linters" id="Linters"> <option disabled selected value> --Choose a Linter-- </option><option>Pylint</option> <option value="audi">ESLint</option> </select></h1>
 <div className="textarea"><textarea className="test" placeholder="Paste code here..." style={{height: "200px", width: "1500px"}}></textarea></div>
 <div className="LintButton">
   <button type="button">Lint Now!</button> 
   <button type="button">Fix Code</button> 
   </div>
+  
 <div className="checkboxes">
   <input type="checkbox" id="whitespace" name="whitespace" value="whitespace"></input>
   <label for="vehicle1"> Whitespace </label>
@@ -27,6 +37,9 @@ function App() {
   <div className="checkbox5">
   <input type="checkbox" id="Other" name="Other" value="Other"></input>
   <label for="vehicle1"> Other </label>
+  </div>
+  <div className="copyrightstuff">
+    <p>Copyright 2020© Joel Gonzalez, Anthony Tudorov, Rudra Desai, Chao-Yang Cheng</p>
   </div>
     </div>
     

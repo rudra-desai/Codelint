@@ -6,6 +6,49 @@ h1 {
   left: 204px;
 }
 
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.copyrightstuff{
+  text-align: center; 
+  position: relative;
+  top: 400px;
+}
+
+.github{
+  position: relative;
+  left: 1300px;
+  top: 25px;
+  height: 10%;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: left;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
 select
 {
   position: relative;
