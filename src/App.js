@@ -8,14 +8,15 @@ function App() {
         <a href="#contact">Contact</a>
         <a href="#about">About</a>
         <div className="github">
-      <button type="button">Link with Github</button> <button type="button">Link with Google</button> 
+      <button class="githubbutton" type="button">Link with Github</button> <button type="button">Link with Google</button> 
       </div>
+      
       </div>
       <h1>EZLint <select name="Linters" id="Linters"> <option disabled selected value> --Choose a Linter-- </option><option>Pylint</option> <option value="audi">ESLint</option> </select></h1>
 <div className="textarea"><textarea className="test" placeholder="Paste code here..." style={{height: "200px", width: "1500px"}}></textarea></div>
 <div className="LintButton">
-  <button type="button">Lint Now!</button> 
-  <button type="button">Fix Code</button> 
+  <button class="button1" type="button">Fix Code</button> 
+  <button class="button2" type="button">Lint Now!</button> 
   </div>
   
 <div className="checkboxes">

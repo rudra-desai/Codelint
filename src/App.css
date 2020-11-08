@@ -16,7 +16,7 @@ ul {
 .copyrightstuff{
   text-align: center; 
   position: relative;
-  top: 400px;
+  top: 10px;
 }
 
 .github{
@@ -39,6 +39,11 @@ ul {
   text-decoration: none;
   font-size: 17px;
   overflow-x: hidden;
+}
+
+.githubbutton
+{
+  background: url(https://github.githubassets.com/images/modules/open_graph/github-octocat.png)
 }
 
 .topnav a:hover {
@@ -82,7 +87,22 @@ select
 .LintButton
 {
   position: relative;
-  left: 1570px;
+  left: 1270px;
+  
+}
+.button1 
+{
+  background-color: #000000;
+  margin: 4px 2px;
+  font-size: 50px;
+  color: white;
+}
+.button2 
+{
+  background-color: #000000;
+  margin: 4px 2px;
+  font-size: 50px;
+  color: white;
 }
 
 .whitespace2
