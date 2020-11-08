@@ -12,10 +12,10 @@ import "ace-builds/src-noconflict/theme-tomorrow_night";
 import "ace-builds/src-noconflict/ext-language_tools"
 
 export default function App() {
-    const [name, setName] = useState('');
+    const [code, setCode] = useState('')
+    const [linter, setLinter] = useState('')
     
     useEffect(() => {
-        setName('EZLint');
         
         Socket.on('test', (data) => {
             console.log(data);
