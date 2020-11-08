@@ -1,5 +1,6 @@
 import os
 import flask
+import subprocess
 import flask_socketio
 import requests
 from flask import request
@@ -29,9 +30,9 @@ def main():
 def on_connect():
     print(f"{request.sid} connected")
     socketio.emit('test', {
-        'message': 'Got the message from Server!'
+        'message': 'Server is up!'
     })
-
+    
 @socketio.on('store state')
 def on_store_state(data):
     states.add(data['state'])
@@ -45,6 +46,13 @@ def on_auth_user(data):
         return
     else:
         get_auth_token(code, state)
+        
+@socketio.on('lint')
+def code(data):
+    linter = data['linter']
+    code = data['code']
+    file_name = data['uuid']
+    file = ''
 
 if __name__ == '__main__':
     import models
