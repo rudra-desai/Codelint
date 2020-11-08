@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
+import { Socket } from './Socket';
+import GithubOauth from './GithubOauth';
 import AceEditor from 'react-ace';
-import Socket from './Socket'
 import Dropdown from 'react-dropdown';
 import { v4 as uuidv4 } from 'uuid';
 import 'react-dropdown/style.css';
@@ -10,29 +11,37 @@ import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-tomorrow_night";
 import "ace-builds/src-noconflict/ext-language_tools"
 
-let socket;
-
 export default function App() {
-    const [code, setCode] = useState('')
-    const [linter, setLinter] = useState('')
-     useEffect(() => {
-         socket = Socket();
-
-         socket.on('test', (data) => {
-                console.log(data)
-         })
-
-         return () => {
-             socket.close();
-         };
-     }, [])
+    const [name, setName] = useState('');
+    
+    useEffect(() => {
+        setName('EZLint');
+        
+        Socket.on('test', (data) => {
+            console.log(data);
+        });
+        
+        return () => {
+            Socket.close();
+        };
+    }, []);
+    
+    useEffect(() => {
+        let url = window.location.href;
+        url = new URL(url);
+        let code = url.searchParams.get('code');
+        let state = url.searchParams.get('state');
+        if (code !== null && state !== null) {
+            Socket.emit('auth user', {'code': code, 'state': state});
+        }
+    }, []);
 
     const handleChange = (newValue) => {
         setCode(newValue)
     }
 
     const handleClick = () => {
-         socket.emit('lint', {
+         Socket.emit('lint', {
              'code': code,
              'linter': linter,
              'uuid': uuidv4()
@@ -66,6 +75,7 @@ export default function App() {
                 }}
             />
             <input type="submit" onClick={handleClick}/>
+            <GithubOauth />
         </div>
     );
 }
