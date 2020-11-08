@@ -1,5 +1,6 @@
 .App {
   text-align: left; 
+  overflow: hidden;
 }
 h1 {
   position: relative;
@@ -37,14 +38,17 @@ ul {
   padding: 14px 16px;
   text-decoration: none;
   font-size: 17px;
+  overflow-x: hidden;
 }
 
 .topnav a:hover {
+  overflow-x: hidden;
   background-color: #ddd;
   color: black;
 }
 
 .topnav a.active {
+  overflow-x: hidden;
   background-color: #4CAF50;
   color: white;
 }
