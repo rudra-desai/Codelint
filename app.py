@@ -1,4 +1,5 @@
 import os
+import re
 import flask
 import subprocess
 import flask_socketio
@@ -9,12 +10,12 @@ from flask_sqlalchemy import SQLAlchemy
 load_dotenv()
 app = flask.Flask(__name__)
 
-database_url = os.getenv('DATABASE_URL')
-app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
-db.app = app
+# database_url = os.getenv('DATABASE_URL')
+# app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#
+# db = SQLAlchemy(app)
+# db.app = app
 
 socketio = flask_socketio.SocketIO(app)
 socketio.init_app(app, cors_allowed_origins="*")
@@ -48,24 +49,20 @@ def code(data):
 
     if linter == 'eslint':
         result = subprocess.run([linter, '-f', 'html', '--fix', f'./userfiles/{filename}'],
-                                stdout=subprocess.PIPE)
+                                stdout=subprocess.PIPE).stdout.decode("utf-8")
 
+        result = result.replace('style="display:none"', 'style="display:table-row"')
+        result = re.sub(r'\[\+\].*.js', 'eslint', result)
         socketio.emit('output', {
             'linter': linter,
-            'output': result.stdout.decode("utf-8")
+            'output': result
         }, room=request.sid)
 
-        subprocess.run(['rm', f'./userfiles/{filename}'])
-
-
-
-
-
-
+        subprocess.run(['rm', '-r' , f'./userfiles/{filename}'])
 
 if __name__ == '__main__':
-    import models
-    models.db.create_all()
+    # import models
+    # models.db.create_all()
     socketio.run(
         app,
         host=os.getenv('IP', '0.0.0.0'),

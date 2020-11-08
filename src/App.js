@@ -5,7 +5,7 @@ import parse from 'html-react-parser';
 import Dropdown from 'react-dropdown';
 import { v4 as uuidv4 } from 'uuid';
 import 'react-dropdown/style.css';
-import "./styles.css";
+import "./styles.css"
 
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-tomorrow_night";
@@ -17,15 +17,11 @@ export default function App() {
     const [code, setCode] = useState('')
     const [linter, setLinter] = useState('')
     const [errors, setErrors] = useState('')
+    const [selectLinterError, setSelectLinterError] = useState('')
      useEffect(() => {
          socket = Socket();
 
-         socket.on('test', (data) => {
-                console.log(data)
-         })
-
          socket.on('output', ({linter, output}) => {
-             console.log(output)
              setErrors(parse(output))
          })
 
@@ -39,6 +35,10 @@ export default function App() {
     }
 
     const handleClick = () => {
+        if (linter === ''){
+            setSelectLinterError('Please select a linter!')
+            return;
+        }
          socket.emit('lint', {
              'code': code,
              'linter': linter,
@@ -48,6 +48,7 @@ export default function App() {
 
     const handleDropdown = ({value}) => {
         setLinter(value)
+        setSelectLinterError('')
     }
 
     return (
@@ -58,6 +59,9 @@ export default function App() {
                            onChange={handleDropdown}
                            value={linter}
                            placeholder="Select a linter" />
+            </div>
+            <div className="div-error">
+                <p className="error">{selectLinterError}</p>
             </div>
             <AceEditor
                 mode="javascript"
@@ -74,7 +78,7 @@ export default function App() {
             />
             <input type="submit" onClick={handleClick}/>
             <br />
-            <div className="errors">
+            <div className="code">
                 {errors}
             </div>
         </div>

@@ -13,15 +13,19 @@ html, body {
     font-family: proxima-nova;
     margin: 0;
     padding: 0;
-    background: black;
 }
 
-h1 {
-    color: white;
-}
 .top{
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
+}
+
+.div-error {
+    width: 70%;
+    margin: 0 auto;
+    text-align: center;
+    background-color: #FFD2D2;
+    border-radius: 5px;
 }
