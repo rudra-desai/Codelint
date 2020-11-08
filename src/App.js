@@ -1,16 +1,11 @@
 import React, {useState, useEffect} from "react";
+import Top from './Top'
+import Editor from './Editor'
 import GithubOauth from './GithubOauth';
-import AceEditor from 'react-ace';
 import Socket from './Socket'
 import parse from 'html-react-parser';
-import Dropdown from 'react-dropdown';
 import { v4 as uuidv4 } from 'uuid';
-import 'react-dropdown/style.css';
 import "./styles.css"
-
-import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/theme-tomorrow_night";
-import "ace-builds/src-noconflict/ext-language_tools"
 
 export default function App() {
     const [code, setCode] = useState('')
@@ -21,13 +16,13 @@ export default function App() {
     const [user, setUser] = useState(null)
     
     useEffect(() => {
-        Socket.on('is logged in', (data) => {
-            console.log(data)
+        Socket.on('logged in data', (data) => {
             setIsLoggedIn(data['logged_in']);
             if (isLoggedIn) {
                 setUser(data['user_info'])
             }
         });
+
         Socket.emit('is logged in');
         
         Socket.on('output', ({linter, output}) => {
@@ -75,29 +70,19 @@ export default function App() {
 
     return (
         <div className="body">
-            <div className="top">
-                 <h1>Codelint</h1>
-                 <Dropdown options={["pylint", "eslint"]}
-                           onChange={handleDropdown}
-                           value={linter}
-                           placeholder="Select a linter" />
-            </div>
+            <Top handleDropdown={handleDropdown}
+                 linter={linter}
+            />
+
             <div className="div-error">
                 <p className="error">{selectLinterError}</p>
             </div>
-            <AceEditor
-                mode="javascript"
-                theme="tomorrow_night"
-                onChange={handleChange}
-                value={code}
-                name="UNIQUE_ID_OF_DIV"
-                editorProps={{ $blockScrolling: true }}
-                setOptions={{
-                  enableBasicAutocompletion: true,
-                  enableLiveAutocompletion: true,
-                  enableSnippets: true
-                }}
+
+            <Editor
+                handleChange={handleChange}
+                code={code}
             />
+
             <input type="submit" value="Lint" onClick={handleClick}/>
             <GithubOauth />
             <br />

@@ -43,7 +43,7 @@ def on_is_logged_in():
         #     user_info = db call
         #     socketio.emit('is logged in', {'logged_in': True, 'user_info': user_info}, request.sid)
     else:
-        socketio.emit('is logged in', {'logged_in': False}, request.sid)
+        socketio.emit('logged in data', {'logged_in': False}, room=request.sid)
 
 @socketio.on('store state')
 def on_store_state(data):
@@ -83,7 +83,7 @@ def code(data):
     file.close()
 
     if linter == 'eslint':
-        result = subprocess.run([linter, '-f', 'html', '--fix', f'./userfiles/{filename}'],
+        result = subprocess.run([linter, '-f', 'html', f'./userfiles/{filename}'],
                                 stdout=subprocess.PIPE).stdout.decode("utf-8")
 
         result = result.replace('style="display:none"', 'style="display:table-row"')
