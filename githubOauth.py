@@ -37,20 +37,20 @@ def get_user_info(user_access_token):
 
 
 def get_auth_token(code, state):
-    print (github_id)
+    print(github_id)
     params = {
         'client_id': github_id,
         'client_secret': github_secret,
         'code': code,
-        'redirect_uri': 'https://b5212afbd02a410697a8708bdded4bf3.vfs.cloud9.us-east-1.amazonaws.com/',
+        'redirect_uri': 'http://localhost:8083/',
         'state': state
     }
     headers = {
         'Accept': 'application/json'
     }
     r = requests.post('https://github.com/login/oauth/access_token', params=params, headers=headers).json()
+    print(r)
     access_token = r['access_token']
     scopes = r['scope'].split(',')
     
     get_user_info(access_token)
-    

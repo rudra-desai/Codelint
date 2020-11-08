@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from "react";
-import { Socket } from './Socket';
 import GithubOauth from './GithubOauth';
 import AceEditor from 'react-ace';
+import Socket from './Socket'
+import parse from 'html-react-parser';
 import Dropdown from 'react-dropdown';
 import { v4 as uuidv4 } from 'uuid';
 import 'react-dropdown/style.css';
-import "./styles.css";
+import "./styles.css"
 
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-tomorrow_night";
@@ -14,26 +15,30 @@ import "ace-builds/src-noconflict/ext-language_tools"
 export default function App() {
     const [code, setCode] = useState('')
     const [linter, setLinter] = useState('')
+    const [errors, setErrors] = useState('')
+    const [selectLinterError, setSelectLinterError] = useState('')
     
     useEffect(() => {
-        
-        Socket.on('test', (data) => {
-            console.log(data);
-        });
+        Socket.on('output', ({linter, output}) => {
+            if (linter === 'eslint')
+                setErrors(parse(output))
+        })
+
+        const url = new URL(window.location.href);
+        const code = url.searchParams.get('code');
+        const state = url.searchParams.get('state');
+
+        if (code !== null && state !== null) {
+            window.history.replaceState({}, document.title, "/"); // Get rid of query parameters
+            Socket.emit('auth user', {
+                'code': code,
+                'state': state
+            });
+        }
         
         return () => {
             Socket.close();
         };
-    }, []);
-    
-    useEffect(() => {
-        let url = window.location.href;
-        url = new URL(url);
-        let code = url.searchParams.get('code');
-        let state = url.searchParams.get('state');
-        if (code !== null && state !== null) {
-            Socket.emit('auth user', {'code': code, 'state': state});
-        }
     }, []);
 
     const handleChange = (newValue) => {
@@ -41,6 +46,10 @@ export default function App() {
     }
 
     const handleClick = () => {
+        if (linter === ''){
+            setSelectLinterError('Please select a linter!')
+            return;
+        }
          Socket.emit('lint', {
              'code': code,
              'linter': linter,
@@ -50,6 +59,7 @@ export default function App() {
 
     const handleDropdown = ({value}) => {
         setLinter(value)
+        setSelectLinterError('')
     }
 
     return (
@@ -60,6 +70,9 @@ export default function App() {
                            onChange={handleDropdown}
                            value={linter}
                            placeholder="Select a linter" />
+            </div>
+            <div className="div-error">
+                <p className="error">{selectLinterError}</p>
             </div>
             <AceEditor
                 mode="javascript"
@@ -74,8 +87,12 @@ export default function App() {
                   enableSnippets: true
                 }}
             />
-            <input type="submit" onClick={handleClick}/>
+            <input type="submit" value="Lint" onClick={handleClick}/>
             <GithubOauth />
+            <br />
+            <div className="code">
+                {errors}
+            </div>
         </div>
     );
 }

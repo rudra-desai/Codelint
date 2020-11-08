@@ -1,3 +1,6 @@
 import io from 'socket.io-client';
 
-export const Socket = io.connect();
+const Socket = io.connect('localhost:3000');
+export default Socket
+
+
