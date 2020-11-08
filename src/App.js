@@ -17,8 +17,19 @@ export default function App() {
     const [linter, setLinter] = useState('')
     const [errors, setErrors] = useState('')
     const [selectLinterError, setSelectLinterError] = useState('')
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [user, setUser] = useState(null)
     
     useEffect(() => {
+        Socket.on('is logged in', (data) => {
+            console.log(data)
+            setIsLoggedIn(data['logged_in']);
+            if (isLoggedIn) {
+                setUser(data['user_info'])
+            }
+        });
+        Socket.emit('is logged in');
+        
         Socket.on('output', ({linter, output}) => {
             if (linter === 'eslint')
                 setErrors(parse(output))
@@ -29,7 +40,7 @@ export default function App() {
         const state = url.searchParams.get('state');
 
         if (code !== null && state !== null) {
-            window.history.replaceState({}, document.title, "/"); // Get rid of query parameters
+            window.history.replaceState({}, document.title, "/");
             Socket.emit('auth user', {
                 'code': code,
                 'state': state
