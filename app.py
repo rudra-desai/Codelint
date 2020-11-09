@@ -7,7 +7,7 @@ from flask import request, session, escape
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 from githubOauth import auth_user, get_user_data, get_user_repos, get_user_repo_tree
-
+from lint import lint_code
 
 load_dotenv()
 app = flask.Flask(__name__)

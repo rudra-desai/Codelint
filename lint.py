@@ -22,7 +22,7 @@ def lint_code(data):
         return pylint(linter, filename)
 
 def eslint(linter, filename):
-    result = subprocess.run([linter, '-f', 'html', f'./userfiles/{filename}'],
+    result = subprocess.run(['eslint', '-f', 'html', f'./userfiles/{filename}'],
                             stdout=subprocess.PIPE).stdout.decode("utf-8")
 
     result = result.replace('style="display:none"', 'style="display:table-row"')
@@ -34,4 +34,14 @@ def eslint(linter, filename):
     }
 
 def pylint(linter, filename):
-    print(linter)
+    ps = subprocess.Popen(('pylint', f'./userfiles/{filename}'), stdout=subprocess.PIPE)
+    result = subprocess.check_output(('pylint-json2html'), stdin=ps.stdout).decode("utf-8")
+    result = re.sub(r'<h2>Metrics<\/h2>(?s).*', '', result)
+    result = re.sub(r'<h1>Pylint report from report.jinja2(?s).+?<\/h3>', '', result)
+    result = re.sub(r'(<tr>(?s).+?<\/tr>)(?s).+?<td>1<\/td>(?s).+?Module name.+?<\/tr>', r'\g<1> ', result)
+
+    return {
+        'linter': linter,
+        'output': result,
+        'filename': filename
+    }
