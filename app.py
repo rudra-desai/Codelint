@@ -35,14 +35,12 @@ def on_connect():
     socketio.emit('test', {
         'message': 'Server is up!'
     })
-
 @socketio.on('is logged in')
 def on_is_logged_in():
     if 'user_id' in session:
         user_id = escape(session['user_id'])
         # if user_id in db:
-        #     user_info = db call
-        #     socketio.emit('is logged in', {'logged_in': True, 'user_info': user_info}, request.sid)
+        #     socketio.emit('is logged in', {'logged_in': True, 'user_info': get_user_data(user_id)}, request.sid)
     else:
         socketio.emit('logged in data', {
             'logged_in': False
@@ -60,15 +58,19 @@ def on_auth_user(data):
         print(f'state: {state} does not match any waiting states')
     else:
         auth_user(code, state)
-        socketio.emit('user data', get_user_data(session['user_id']))
+        socketio.emit('user data', get_user_data(request.sid))
         
 @socketio.on('get repos')
-def on_get_user_repos():
-    socketio.emit('repos', get_user_repos(session['user_id']), request.sid)
+def on_get_repos():
+    socketio.emit('repos', get_user_repos(request.sid), request.sid)
     
 @socketio.on('get repo tree')
-def on_get_user_repo_tree(data):
-    socketio.emit('repo tree', get_user_repo_tree(session['user_id'], data['repo_url']), request.sid)
+def on_get_repo_tree(data):
+    socketio.emit('repo tree', get_user_repo_tree(request.sid, data['repo_url']))
+    
+@socketio.emit('get file contents')
+def on_get_file_contents(data):
+    socketio.emit('file contents', get_user_file_contents(request.sid, data['content_url']))
 
 @socketio.on('lint')
 def code(data):
