@@ -1,5 +1,4 @@
 import os
-import re
 import flask
 import subprocess
 import flask_socketio
@@ -8,6 +7,7 @@ from flask import request, session, escape
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 from githubOauth import auth_user, get_user_data, get_user_repos, get_user_repo_tree
+
 
 load_dotenv()
 app = flask.Flask(__name__)
@@ -24,6 +24,7 @@ socketio = flask_socketio.SocketIO(app)
 socketio.init_app(app, cors_allowed_origins="*")
 
 states = set()
+
 @app.route('/')
 def main():
     return flask.render_template('index.html')
@@ -43,7 +44,9 @@ def on_is_logged_in():
         #     user_info = db call
         #     socketio.emit('is logged in', {'logged_in': True, 'user_info': user_info}, request.sid)
     else:
-        socketio.emit('logged in data', {'logged_in': False}, room=request.sid)
+        socketio.emit('logged in data', {
+            'logged_in': False
+        }, room=request.sid)
 
 @socketio.on('store state')
 def on_store_state(data):
@@ -54,7 +57,7 @@ def on_auth_user(data):
     code = data['code']
     state = data['state']
     if state not in states:
-        print('state: ', state, ' does not match any waiting states')
+        print(f'state: {state} does not match any waiting states')
     else:
         auth_user(code, state)
         socketio.emit('user data', get_user_data(session['user_id']))
@@ -69,31 +72,9 @@ def on_get_user_repo_tree(data):
 
 @socketio.on('lint')
 def code(data):
-    linter = data['linter']
-    code = data['code']
-    filename = data['uuid'] + ('.py' if linter == 'pylint' else '.js')
-
-    # get the current script path.
-    here = os.path.dirname(os.path.realpath(__file__))
-    subdir = "userfiles"
-
-    filepath = os.path.join(here, subdir, filename)
-    file = open(filepath, "w")
-    file.write(code)
-    file.close()
-
-    if linter == 'eslint':
-        result = subprocess.run([linter, '-f', 'html', f'./userfiles/{filename}'],
-                                stdout=subprocess.PIPE).stdout.decode("utf-8")
-
-        result = result.replace('style="display:none"', 'style="display:table-row"')
-        result = re.sub(r'\[\+\].*.js', 'eslint', result)
-        socketio.emit('output', {
-            'linter': linter,
-            'output': result
-        }, room=request.sid)
-
-        subprocess.run(['rm', '-r', f'./userfiles/{filename}'])
+    res = lint_code(data)
+    socketio.emit('output', res, room=request.sid)
+    subprocess.run(['rm', '-r', f'./userfiles/{res["filename"]}'])
 
 if __name__ == '__main__':
     import models
