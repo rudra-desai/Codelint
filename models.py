@@ -5,12 +5,12 @@ import datetime
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    login = db.Column(db.String(120))
+    login = db.Column(db.String(120), unique=True)
     name = db.Column(db.String(120))
     email = db.Column(db.String(120))
     profile_image = db.Column(db.Stinrg(120))
-    sid = db.Column(db.Stinrg(120))
-    access_token = db.Column(db.String(120))
+    sid = db.Column(db.Stinrg(120), unique=True)
+    access_token = db.Column(db.String(120), unique=True)
     
     def __init__(self, login, name, email, profile, sid, access_token):
         self.login = login
