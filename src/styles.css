@@ -22,3 +22,17 @@ html, body {
     background-color: #FFD2D2;
     border-radius: 5px;
 }
+.github{
+      text-align: right;
+      background-color: #000000;
+      font-size: 5px;
+}
+.lintbutton{
+    color: white;
+    position: absolute;
+    right: 1px;
+    font-size: 5px;
+}
+.button1{
+    padding: 10px 24px;
+}

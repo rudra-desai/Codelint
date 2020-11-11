@@ -1,6 +1,6 @@
 import React from "react";
 import Socket from './Socket';
-
+import "./styles.css" 
 export default function GithubOauth() {
 
     function handleLogin() {
@@ -13,6 +13,6 @@ export default function GithubOauth() {
     }
     
     return (
-      <button onClick={handleLogin}>Github</button>
+      <button  onClick={handleLogin}><img width="26px" height="" src="https://i.imgur.com/7Kq4PLu.png"></img>Link With Github</button>
     );
 }
