@@ -4,21 +4,8 @@ import subprocess
 import flask_socketio
 import models
 from flask import request, session, escape
-from dotenv import load_dotenv
-from flask_sqlalchemy import SQLAlchemy
-from githubOauth import auth_user, get_user_data, get_user_repos, get_user_repo_tree
-from lint import lint_code
-
-load_dotenv()
-app = flask.Flask(__name__)
-
-database_url = os.getenv('DATABASE_URL')
-app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = os.getenv('APP_SECRET')
-
-db = SQLAlchemy(app)
-db.app = app
+from githubOauth import auth_user, get_user_data, get_user_repos, get_user_repo_tree, get_user_file_contents
+from settings import db, app
 
 socketio = flask_socketio.SocketIO(app)
 socketio.init_app(app, cors_allowed_origins="*")
@@ -35,16 +22,14 @@ def on_connect():
     socketio.emit('test', {
         'message': 'Server is up!'
     })
-@socketio.on('is logged in')
-def on_is_logged_in():
-    if 'user_id' in session:
-        user_id = escape(session['user_id'])
-        # if user_id in db:
-        #     socketio.emit('is logged in', {'logged_in': True, 'user_info': get_user_data(user_id)}, request.sid)
-    else:
-        socketio.emit('logged in data', {
-            'logged_in': False
-        }, room=request.sid)
+    
+@socketio.on('disconnect')
+def on_disconnect():
+    print(f"{request.sid} disconnected")
+    user = models.Users.query.filter_by(sid=request.sid).first()
+    if user is not None:
+        db.session.delete(user)
+        db.session.commit()
 
 @socketio.on('store state')
 def on_store_state(data):
@@ -68,7 +53,7 @@ def on_get_repos():
 def on_get_repo_tree(data):
     socketio.emit('repo tree', get_user_repo_tree(request.sid, data['repo_url']))
     
-@socketio.emit('get file contents')
+@socketio.on('get file contents')
 def on_get_file_contents(data):
     socketio.emit('file contents', get_user_file_contents(request.sid, data['content_url']))
 
