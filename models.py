@@ -5,28 +5,24 @@ import datetime
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String(120))
-    historys = relationship("History", backref="Users")
+    login = db.Column(db.String(120))
+    name = db.Column(db.String(120))
+    email = db.Column(db.String(120))
+    profile_image = db.Column(db.Stinrg(120))
+    sid = db.Column(db.Stinrg(120))
+    headers = db.Column(db.String(120))
     
-    def __init__(self, user_name):
-        self.user_name = user_name
+    def __init__(self, login, name, email, profile, sid, headers):
+        self.login = login
+        self.name = name
+        self.email = email
+        self.profile = profile
+        self.sid = sid
+        self.headers = headers
 
     def __repr__(self):
         return str({
-            'username': self.user_name,
+            'username': self.name, 'login': self.login, 'email': self.email, 'profile_image': self.profile, 'sid': self.sid, 'headers': self.headers
         })
     
-class History(db.Model):
-    id = db.Column(db.Integer,db.ForeignKey('users.id'),primary_key=True)
-    file_name = db.Column(db.String(120))
-    time_stamp = db.Column(datetime)
-    users = relationship('Users', foreign_keys='History.id')
-    
-    def __init__(self, file_name,time_stamp):
-        self.file_name = file_name
-        self.time_stamp = time_stamp
-    
-    def __repr__(self):
-        return str({
-            'filename': self.file_name, 'time_stamp':self.time_stamp
-        })
+
