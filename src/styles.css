@@ -2,11 +2,9 @@
   font-family: 'proxima-nova';
   src: url('/static/proximaNova.ttf');
 }
-* {
-    transition: ease all .5s;
-}
+
 .App {
-    text-align: center;
+    text-align: left;
     height: 100%;
 }
 
@@ -15,4 +13,12 @@ html, body {
     font-family: proxima-nova;
     margin: 0;
     padding: 0;
+}
+
+.div-error {
+    width: 70%;
+    margin: 0 auto;
+    text-align: center;
+    background-color: #FFD2D2;
+    border-radius: 5px;
 }
