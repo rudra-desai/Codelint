@@ -28,6 +28,8 @@ export default function App() {
         Socket.on('output', ({linter, output}) => {
             if (linter === 'eslint')
                 setErrors(parse(output))
+            if (linter === 'pylint')
+                setErrors(parse(output))
         })
 
         const url = new URL(window.location.href);
