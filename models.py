@@ -10,19 +10,19 @@ class Users(db.Model):
     email = db.Column(db.String(120))
     profile_image = db.Column(db.Stinrg(120))
     sid = db.Column(db.Stinrg(120))
-    headers = db.Column(db.String(120))
+    access_token = db.Column(db.String(120))
     
-    def __init__(self, login, name, email, profile, sid, headers):
+    def __init__(self, login, name, email, profile, sid, access_token):
         self.login = login
         self.name = name
         self.email = email
         self.profile = profile
         self.sid = sid
-        self.headers = headers
+        self.access_token = access_token
 
     def __repr__(self):
         return str({
-            'username': self.name, 'login': self.login, 'email': self.email, 'profile_image': self.profile, 'sid': self.sid, 'headers': self.headers
+            'username': self.name, 'login': self.login, 'email': self.email, 'profile_image': self.profile, 'sid': self.sid, 'access_token': self.access_token
         })
     
 
