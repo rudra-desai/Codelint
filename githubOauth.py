@@ -19,15 +19,10 @@ def log_user_info(user_access_token):
     name = user['name']
     email = user['email']
     profile_image = user['avatar_url']
-    db.session.add(models.Users(login, name, email, profile_image, request.sid, user_access_token))
+    print(request.sid)
+    model = models.Users(login, name, email, profile_image, request.sid, user_access_token)
+    db.session.add(model)
     db.session.commit()
-    
-    repos = get_user_repos(request.sid)
-    print(repos)
-    tree = get_user_repo_tree(request.sid, repos['repos'][11][1])
-    print(tree)
-    content = get_user_file_contents(request.sid, tree['tree'][9]['url'])
-    print(content)
     
 def auth_user(code, state):
     params = {
@@ -41,7 +36,6 @@ def auth_user(code, state):
         'Accept': 'application/json'
     }
     r = requests.post('https://github.com/login/oauth/access_token', params=params, headers=headers).json()
-    print(r)
     access_token = r['access_token']
     
     log_user_info(access_token)
@@ -74,7 +68,10 @@ def get_user_repo_tree(user_id, repo_url):
         'Accept': 'application/vnd.github.v3+json'
     }
     repo_url = repo_url + '/commits/master'
-    repo = requests.get(repo_url, headers=headers).json()
+    repo = requests.get(repo_url, headers=headers)
+    if repo.status_code == 403:
+        return {'tree': None, 'error': 'bad github token'}
+    repo = repo.json()
     params = {
         'recursive': True
     }
@@ -96,7 +93,6 @@ def get_user_file_contents(user_id, content_url):
         return {'contents': None, 'error': 'bad github token'}
     
     contents = contents.json()
-    print(contents)
     if 'content' not in contents:
         return {'contents': None, 'error': 'could not determine contents'}
     else:
