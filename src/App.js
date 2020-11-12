@@ -72,11 +72,13 @@ export default function App() {
 
     return (
         <div className="body">
-            <div className="github"><GithubOauth /></div>
+
+            <div className="github">
+                <GithubOauth />
+            </div>
             <Top handleDropdown={handleDropdown}
                  linter={linter}
             />
-            
 
             <div className="div-error">
                 <p className="error">{selectLinterError}</p>
@@ -86,7 +88,7 @@ export default function App() {
                 handleChange={handleChange}
                 code={code}
             />
-            <div className="lintbutton"> <button type="button" class="button1" onClick={handleClick}> Lint Now! </button> </div>
+            <button type="button" class="lintbutton" onClick={handleClick}>Lint!</button>
             <br />
             <div className="code">
                 {errors}

@@ -28,11 +28,7 @@ html, body {
       font-size: 5px;
 }
 .lintbutton{
-    color: white;
+    padding: 10px 24px;
     position: absolute;
     right: 1px;
-    font-size: 5px;
-}
-.button1{
-    padding: 10px 24px;
 }

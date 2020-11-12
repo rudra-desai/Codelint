@@ -4,10 +4,3 @@
     justify-content: space-evenly;
     align-items: center;
 }
-.codelint {
-    text-align: right;
-    align-items: right;
-    position: absolute;
-    top: 15px;
-    left: 4px;
-}
