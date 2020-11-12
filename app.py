@@ -2,8 +2,6 @@ import os
 import flask
 import subprocess
 import flask_socketio
-import models
-from os.path import join, dirname
 from flask import request, session, escape
 from githubOauth import auth_user, get_user_data, get_user_repos, get_user_repo_tree, get_user_file_contents
 from settings import db, app

@@ -6,6 +6,7 @@ import Socket from './Socket'
 import parse from 'html-react-parser';
 import { v4 as uuidv4 } from 'uuid';
 import "./styles.css"
+import loadingGif from './loading.gif';
 
 export default function App() {
     const [code, setCode] = useState('')
@@ -13,6 +14,7 @@ export default function App() {
     const [errors, setErrors] = useState('')
     const [selectLinterError, setSelectLinterError] = useState('')
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [user, setUser] = useState(null)
     
     useEffect(() => {
@@ -26,6 +28,7 @@ export default function App() {
         Socket.emit('is logged in');
         
         Socket.on('output', ({linter, output}) => {
+            setLoading(false)
             if (linter === 'eslint')
                 setErrors(parse(output))
             if (linter === 'pylint')
@@ -58,6 +61,7 @@ export default function App() {
             setSelectLinterError('Please select a linter!')
             return;
         }
+        setLoading(true)
          Socket.emit('lint', {
              'code': code,
              'linter': linter,
@@ -85,7 +89,7 @@ export default function App() {
                 code={code}
             />
 
-            <input type="submit" value="Lint" onClick={handleClick}/>
+            <button onClick={handleClick}>{loading ? <img src={loadingGif} alt="loading" value="Lint!" /> : "Lint!"}</button>
             <GithubOauth />
             <br />
             <div className="code">
