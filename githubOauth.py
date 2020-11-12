@@ -19,7 +19,8 @@ def log_user_info(user_access_token):
     name = user['name']
     email = user['email']
     profile_image = user['avatar_url']
-    db.session.add(models.Users(login, name, email, profile_image, user_access_token, request.sid))
+    model = models.Users(login, name, email, profile_image, request.sid, user_access_token)
+    db.session.add(model)
     db.session.commit()
     
 def auth_user(code, state):
@@ -66,7 +67,10 @@ def get_user_repo_tree(user_id, repo_url):
         'Accept': 'application/vnd.github.v3+json'
     }
     repo_url = repo_url + '/commits/master'
-    repo = requests.get(repo_url, headers=headers).json()
+    repo = requests.get(repo_url, headers=headers)
+    if repo.status_code == 403:
+        return {'tree': None, 'error': 'bad github token'}
+    repo = repo.json()
     params = {
         'recursive': True
     }

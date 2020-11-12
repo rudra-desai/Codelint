@@ -3,7 +3,12 @@ from unittest import mock
 from unittest.mock import patch
 import sys
 import os
-sys.path.insert(1, os.getcwd())
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+import githubOauth
+import mock_methods
+import mock_github_responses
 import app as wholeApp
 from app import app
 from app import socketio
@@ -18,6 +23,85 @@ class mocked(unittest.TestCase):
         user = app.test_client(self)
         response = user.get('/', content_type='html/text')
         self.assertEqual(response.status_code, 200)
+        
+    def test_auth_user(self):
+        INPUT = {
+            'code': 1234,
+            'state': 4321
+        }
+        
+        with patch('requests.post', mock_methods.mock_success_request_post), patch('requests.get', mock_methods.mock_success_request_get), patch('settings.db.session', mock_methods.mock_db_session), patch('models.Users', mock_methods.mock_users), patch('githubOauth.request', mock_methods.mock_request):
+            githubOauth.auth_user(**INPUT)
+            
+    def test_get_user_data(self):
+        INPUT = {
+            'user_id': 1234
+        }
+        OUTPUT = {
+            'login': 'AnthonyTudorov',
+            'profile_image': 'https://avatars0.githubusercontent.com/u/12437954?v=4'
+        }
+        with patch('models.Users', mock_methods.mock_users):
+            response = githubOauth.get_user_data(**INPUT)
+        self.assertDictEqual(response, OUTPUT)
+        
+    def test_success_get_user_repos(self):
+        INPUT = {
+            'user_id': 1234
+        }
+        OUTPUT = mock_github_responses.repos_return
+        with patch('models.Users', mock_methods.mock_users), patch('requests.get', mock_methods.mock_success_request_get):
+            response = githubOauth.get_user_repos(**INPUT)
+        self.assertDictEqual(response, OUTPUT)
+        
+    def test_failure_get_user_repos(self):
+        INPUT = {
+            'user_id': 1234
+        }
+        OUTPUT = {'repos': None, 'error': 'bad github token'}
+        with patch('models.Users', mock_methods.mock_users), patch('requests.get', mock_methods.mock_failure_request_get):
+            response = githubOauth.get_user_repos(**INPUT)
+        self.assertDictEqual(response, OUTPUT)
+        
+    def test_success_get_user_repo_tree(self):
+        INPUT = {
+            'user_id': 1234,
+            'repo_url': 'https://api.github.com/repos/rudra-desai/Codelint'
+        }
+        OUTPUT = mock_github_responses.tree_return
+        with patch('models.Users', mock_methods.mock_users), patch('requests.get', mock_methods.mock_success_request_get):
+            response = githubOauth.get_user_repo_tree(**INPUT)
+        self.assertDictEqual(response, OUTPUT)
+        
+    def test_failure_get_user_repo_tree(self):
+        INPUT = {
+            'user_id': 1234,
+            'repo_url': 'https://api.github.com/repos/rudra-desai/Codelint'
+        }
+        OUTPUT = {'tree': None, 'error': 'bad github token'}
+        with patch('models.Users', mock_methods.mock_users), patch('requests.get', mock_methods.mock_failure_request_get):
+            response = githubOauth.get_user_repo_tree(**INPUT)
+        self.assertDictEqual(response, OUTPUT)
+
+    def test_success_get_user_file_contents(self):
+        INPUT = {
+            'user_id': 1234,
+            'content_url': 'https://api.github.com/repos/rudra-desai/Codelint/git/blobs/a9150ca05f13ad4e0d79311b7ba9da09227553da'
+        }
+        OUTPUT = mock_github_responses.content_return
+        with patch('models.Users', mock_methods.mock_users), patch('requests.get', mock_methods.mock_success_request_get):
+            response = githubOauth.get_user_file_contents(**INPUT)
+        self.assertDictEqual(response, OUTPUT)
+        
+    def test_failure_get_user_file_contents(self):
+        INPUT = {
+            'user_id': 1234,
+            'content_url': 'https://api.github.com/repos/rudra-desai/Codelint/git/blobs/a9150ca05f13ad4e0d79311b7ba9da09227553da'
+        }
+        OUTPUT = {'contents': None, 'error': 'bad github token'}
+        with patch('models.Users', mock_methods.mock_users), patch('requests.get', mock_methods.mock_failure_request_get):
+            response = githubOauth.get_user_file_contents(**INPUT)
+        self.assertDictEqual(response, OUTPUT)
 
 if __name__ == '__main__':
     unittest.main()
