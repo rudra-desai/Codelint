@@ -19,8 +19,15 @@ def log_user_info(user_access_token):
     name = user['name']
     email = user['email']
     profile_image = user['avatar_url']
-    db.session.add(models.Users(login, name, email, profile_image, user_access_token, request.sid))
+    db.session.add(models.Users(login, name, email, profile_image, request.sid, user_access_token))
     db.session.commit()
+    
+    repos = get_user_repos(request.sid)
+    print(repos)
+    tree = get_user_repo_tree(request.sid, repos['repos'][11][1])
+    print(tree)
+    content = get_user_file_contents(request.sid, tree['tree'][9]['url'])
+    print(content)
     
 def auth_user(code, state):
     params = {
@@ -34,6 +41,7 @@ def auth_user(code, state):
         'Accept': 'application/json'
     }
     r = requests.post('https://github.com/login/oauth/access_token', params=params, headers=headers).json()
+    print(r)
     access_token = r['access_token']
     
     log_user_info(access_token)
@@ -88,6 +96,7 @@ def get_user_file_contents(user_id, content_url):
         return {'contents': None, 'error': 'bad github token'}
     
     contents = contents.json()
+    print(contents)
     if 'content' not in contents:
         return {'contents': None, 'error': 'could not determine contents'}
     else:
