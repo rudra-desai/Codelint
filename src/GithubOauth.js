@@ -1,6 +1,6 @@
 import React from "react";
 import Socket from './Socket';
-
+import './github.css'
 export default function GithubOauth() {
 
     function handleLogin() {
@@ -13,6 +13,9 @@ export default function GithubOauth() {
     }
     
     return (
-      <button onClick={handleLogin}>Github</button>
+      <button className="gitButton" onClick={handleLogin}>
+          <img className="logo" width="20px" height="" src="https://assets.stickpng.com/images/5847f98fcef1014c0b5e48c0.png"></img>
+          Link With Github
+      </button>
     );
 }

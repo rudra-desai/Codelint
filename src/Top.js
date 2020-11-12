@@ -6,11 +6,12 @@ import './top.css'
 export default function Top({handleDropdown , linter}) {
     return (
         <div className="top">
-                 <h1>Codelint</h1>
-                 <Dropdown options={["pylint", "eslint"]}
-                           onChange={handleDropdown}
-                           value={linter}
-                           placeholder="Select a linter" />
+            <h2>Codelint</h2>
+            <Dropdown className="dropdown" options={["pylint", "eslint"]}
+                onChange={handleDropdown}
+                value={linter}
+                placeholder="Select a linter"
+            />
         </div>
     )
 }

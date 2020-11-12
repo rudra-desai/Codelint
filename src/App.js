@@ -76,6 +76,10 @@ export default function App() {
 
     return (
         <div className="body">
+
+            <div className="github">
+                <GithubOauth />
+            </div>
             <Top handleDropdown={handleDropdown}
                  linter={linter}
             />
@@ -88,9 +92,8 @@ export default function App() {
                 handleChange={handleChange}
                 code={code}
             />
+            <button class="lintbutton" onClick={handleClick}>{loading ? <img src={loadingGif} alt="loading" value="Lint!" /> : "Lint!"}</button>
 
-            <button onClick={handleClick}>{loading ? <img src={loadingGif} alt="loading" value="Lint!" /> : "Lint!"}</button>
-            <GithubOauth />
             <br />
             <div className="code">
                 {errors}
