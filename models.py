@@ -5,8 +5,8 @@ class Users(db.Model):
     login = db.Column(db.String(120), unique=True, nullable=False)
     name = db.Column(db.String(120))
     email = db.Column(db.String(120))
-    profile_image = db.Column(db.Stinrg(120))
-    sid = db.Column(db.Stinrg(120), unique=True, nullable=False)
+    profile_image = db.Column(db.String(120))
+    sid = db.Column(db.String(120), unique=True, nullable=False)
     access_token = db.Column(db.String(120), unique=True)
     
     def __init__(self, login, name, email, profile_image, sid, access_token):
