@@ -9,7 +9,7 @@ class Users(db.Model):
     sid = db.Column(db.String(120), unique=True, nullable=False)
     access_token = db.Column(db.String(120), unique=True)
     
-    def __init__(self, login, name, email, profile_image, access_token, sid):
+    def __init__(self, login, name, email, profile_image, sid, access_token):
         self.login = login
         self.name = name
         self.email = email
