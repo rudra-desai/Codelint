@@ -95,3 +95,11 @@ class mock_query:
             
     def first(self):
         return self.new_first()
+        
+class mock_string:
+    def __init__(self, number=None):
+        pass
+    
+class mock_coloumn:
+    def __init__(self, t, primary_key=None, unique=None, nullable=None):
+        pass

@@ -19,7 +19,7 @@ class Users(db.Model):
         
     def __repr__(self):
         return str({
-            'username': self.name, 'login': self.login, 'email': self.email, 'profile_image': self.profile, 'sid': self.sid, 'access_token': self.access_token
+            'login': self.login, 'name': self.name, 'email': self.email, 'profile_image': self.profile_image, 'sid': self.sid, 'access_token': self.access_token
         })
     
 
