@@ -95,4 +95,4 @@ def get_user_file_contents(user_id, content_url):
     if 'content' not in contents:
         return {'contents': None, 'error': 'could not determine contents'}
     else:
-        return {'contents': base64.b64decode(contents['content']), 'error': None}
+        return {'contents': base64.b64decode(contents['content']).decode("utf-8"), 'error': None}

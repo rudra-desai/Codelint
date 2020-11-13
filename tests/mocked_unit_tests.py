@@ -7,6 +7,7 @@ currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 import githubOauth
+import models
 import mock_methods
 import mock_github_responses
 import app as wholeApp
@@ -102,6 +103,27 @@ class mocked(unittest.TestCase):
         with patch('models.Users', mock_methods.mock_users), patch('requests.get', mock_methods.mock_failure_request_get):
             response = githubOauth.get_user_file_contents(**INPUT)
         self.assertDictEqual(response, OUTPUT)
+        
+    def test_models(self):
+        INPUT = {
+            'login': 'test',
+            'name': 'tester',
+            'email': 'tester@test.com',
+            'profile_image': 'test.png',
+            'sid': 1234,
+            'access_token': 4321
+        }
+        OUTPUT = str({
+            'login': 'test',
+            'name': 'tester',
+            'email': 'tester@test.com',
+            'profile_image': 'test.png',
+            'sid': 1234,
+            'access_token': 4321
+        })
+        with patch('settings.db.Column', mock_methods.mock_coloumn), patch('settings.db.String', mock_methods.mock_string):
+            response = models.Users(**INPUT).__repr__()
+        self.assertEqual(response, OUTPUT)
 
 if __name__ == '__main__':
     unittest.main()
