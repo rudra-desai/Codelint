@@ -75,7 +75,7 @@
     <p id="t22" class="run"><span class="n"><a href="#t22">22</a></span><span class="t">        <span class="key">return</span> <span class="nam">pylint</span><span class="op">(</span><span class="nam">linter</span><span class="op">,</span> <span class="nam">filename</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t23" class="pln"><span class="n"><a href="#t23">23</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t24" class="run"><span class="n"><a href="#t24">24</a></span><span class="t"><span class="key">def</span> <span class="nam">eslint</span><span class="op">(</span><span class="nam">linter</span><span class="op">,</span> <span class="nam">filename</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t25" class="run"><span class="n"><a href="#t25">25</a></span><span class="t">    <span class="nam">result</span> <span class="op">=</span> <span class="nam">subprocess</span><span class="op">.</span><span class="nam">run</span><span class="op">(</span><span class="op">[</span><span class="str">'./node_modules/.bin/eslint'</span><span class="op">,</span> <span class="str">'-f'</span><span class="op">,</span> <span class="str">'html'</span><span class="op">,</span> <span class="str">f'./userfiles/{filename}'</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t25" class="run"><span class="n"><a href="#t25">25</a></span><span class="t">    <span class="nam">result</span> <span class="op">=</span> <span class="nam">subprocess</span><span class="op">.</span><span class="nam">run</span><span class="op">(</span><span class="op">[</span><span class="str">'eslint'</span><span class="op">,</span> <span class="str">'-f'</span><span class="op">,</span> <span class="str">'html'</span><span class="op">,</span> <span class="str">f'./userfiles/{filename}'</span><span class="op">]</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t26" class="pln"><span class="n"><a href="#t26">26</a></span><span class="t">                            <span class="nam">stdout</span><span class="op">=</span><span class="nam">subprocess</span><span class="op">.</span><span class="nam">PIPE</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t27" class="pln"><span class="n"><a href="#t27">27</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t28" class="run"><span class="n"><a href="#t28">28</a></span><span class="t">    <span class="nam">result</span> <span class="op">=</span> <span class="nam">result</span><span class="op">.</span><span class="nam">stdout</span><span class="op">.</span><span class="nam">decode</span><span class="op">(</span><span class="str">"utf-8"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -107,7 +107,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.3</a>,
-            created at 2020-11-13 16:46 -0500
+            created at 2020-11-13 18:43 -0500
         </p>
     </div>
 </div>

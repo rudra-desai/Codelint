@@ -111,7 +111,7 @@ class unmocked(unittest.TestCase):
             mock_pylint.return_value = None
             res = lint.lint_code({
                 'linter': 'pylint',
-                'code': 'function test(){\nconsole.log("Hello")\n}',
+                'code': 'def func():\n  print("Hello")',
                 'uuid': 'testfile'
             })
             here = os.path.dirname(os.path.abspath(__file__))
@@ -119,7 +119,7 @@ class unmocked(unittest.TestCase):
             subdir = "userfiles"
             filepath = os.path.join(here, subdir, "testfile.py")
             file = open(filepath, "r")
-            self.assertEqual(file.read(), 'function test(){\nconsole.log("Hello")\n}')
+            self.assertEqual(file.read(), 'def func():\n  print("Hello")')
 
             flask_test_client = app.test_client()
             socketio_test_client = socketio.test_client(app, flask_test_client=flask_test_client)

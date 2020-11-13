@@ -22,7 +22,7 @@ def lint_code(data):
         return pylint(linter, filename)
 
 def eslint(linter, filename):
-    result = subprocess.run(['./node_modules/.bin/eslint', '-f', 'html', f'./userfiles/{filename}'],
+    result = subprocess.run(['eslint', '-f', 'html', f'./userfiles/{filename}'],
                             stdout=subprocess.PIPE)
 
     result = result.stdout.decode("utf-8")

@@ -1,3 +1,2 @@
-function test(){
-console.log("Hello")
-}
+def func():
+  print("Hello")
