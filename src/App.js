@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import "./styles.css"
 import loadingGif from './loading.gif';
 
+
 export default function App() {
     const [code, setCode] = useState('')
     const [linter, setLinter] = useState('')
@@ -16,16 +17,38 @@ export default function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [loading, setLoading] = useState(false)
     const [user, setUser] = useState(null)
+    const [repos, setRepos] = useState([])
+    const [allRepoInfo, setAllRepoInfo] = useState([])
+    const [selectedRepo, setSelectedRepo] = useState('')
+    const [repoTree, setRepoTree] = useState([])
+    const [repoTreeFiles, setRepoTreeFiles] = useState([])
+    const [selectedFile, setSelectedFile] = useState('')
     
     useEffect(() => {
-        Socket.on('logged in data', (data) => {
-            setIsLoggedIn(data['logged_in']);
-            if (isLoggedIn) {
-                setUser(data['user_info'])
-            }
-        });
+        Socket.on("user data", ({login, profile_image}) => {
+            setUser(login)
+            setIsLoggedIn(true)
+            Socket.emit("get repos")
+        })
 
-        Socket.emit('is logged in');
+        Socket.on("repos", ({repos}) => {
+            setRepos(repos.map(([elem,]) => elem))
+            setAllRepoInfo(repos)
+        })
+
+        Socket.on("repo tree", (data) => {
+            setRepoTree(data)
+            let arr = []
+            data.tree.forEach(({path, type})=> {
+                if (type === "blob")
+                    arr.push(path)
+            })
+            setRepoTreeFiles(arr)
+        })
+
+        Socket.on("file contents", (data) => {
+            setCode(data.contents)
+        })
         
         Socket.on('output', ({linter, output}) => {
             setLoading(false)
@@ -69,19 +92,56 @@ export default function App() {
          })
     }
 
-    const handleDropdown = ({value}) => {
+    const handleLinter = ({value}) => {
         setLinter(value)
         setSelectLinterError('')
+    }
+
+    const handleSelectedRepo = ({value}) => {
+        setSelectedRepo(value)
+        allRepoInfo.forEach(([repo_name, url]) => {
+            if(value === repo_name)
+            {
+                if (url.includes(user))
+                    Socket.emit("get repo tree", {
+                        "repo_url": url
+                    })
+            }
+        })
+    }
+
+    const handleRepoTree = ({value}) => {
+        setSelectedFile(value)
+        repoTree.tree.forEach(({path, url})=> {
+            if (path === value){
+                Socket.emit("get file contents", {
+                    "content_url": url
+                })
+                if (value.includes(".py"))
+                    setLinter("pylint")
+
+                if (value.includes(".js") || value.includes(".jsx"))
+                    setLinter("eslint")
+
+            }
+        })
     }
 
     return (
         <div className="body">
 
             <div className="github">
+                <div className="user">{user}</div>
                 <GithubOauth />
             </div>
-            <Top handleDropdown={handleDropdown}
+            <Top handleSelectedRepo={handleSelectedRepo}
+                 selectedRepo={selectedRepo}
+                 handleLinter={handleLinter}
                  linter={linter}
+                 repos={repos}
+                 handleRepoTree={handleRepoTree}
+                 repoTreeFiles={repoTreeFiles}
+                 selectedFile={selectedFile}
             />
 
             <div className="div-error">

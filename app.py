@@ -55,6 +55,7 @@ def on_get_repo_tree(data):
     
 @socketio.on('get file contents')
 def on_get_file_contents(data):
+    print(data["content_url"])
     socketio.emit('file contents', get_user_file_contents(request.sid, data['content_url']))
 
 @socketio.on('lint')

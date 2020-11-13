@@ -9,13 +9,13 @@ class Users(db.Model):
     sid = db.Column(db.String(120), unique=True, nullable=False)
     access_token = db.Column(db.String(120), unique=True)
     
-    def __init__(self, login, name, email, profile_image, sid, access_token):
+    def __init__(self, login, name, email, profile_image, access_token, sid):
         self.login = login
         self.name = name
         self.email = email
         self.profile_image = profile_image
-        self.sid = sid
         self.access_token = access_token
+        self.sid = sid
         
     def __repr__(self):
         return str({

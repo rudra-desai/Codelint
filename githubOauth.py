@@ -27,7 +27,7 @@ def auth_user(code, state):
         'client_id': github_id,
         'client_secret': github_secret,
         'code': code,
-        'redirect_uri': 'https://b5212afbd02a410697a8708bdded4bf3.vfs.cloud9.us-east-1.amazonaws.com/',
+        'redirect_uri': 'http://localhost:8082/',
         'state': state
     }
     headers = {
@@ -91,4 +91,4 @@ def get_user_file_contents(user_id, content_url):
     if 'content' not in contents:
         return {'contents': None, 'error': 'could not determine contents'}
     else:
-        return {'contents': base64.b64decode(contents['content']), 'error': None}
+        return {'contents': base64.b64decode(contents['content']).decode("utf-8"), 'error': None}

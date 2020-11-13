@@ -4,3 +4,9 @@
     justify-content: space-evenly;
     align-items: center;
 }
+.dropdown{
+    width: 300px;
+}
+.files{
+    display: flex;
+}
