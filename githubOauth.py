@@ -28,7 +28,7 @@ def auth_user(code, state):
         'client_id': github_id,
         'client_secret': github_secret,
         'code': code,
-        'redirect_uri': 'http://localhost:8082/',
+        'redirect_uri': 'http://localhost:8080/',
         'state': state
     }
     headers = {

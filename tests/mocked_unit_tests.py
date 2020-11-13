@@ -6,10 +6,10 @@ import os
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
-import githubOauth
-import models
 import mock_methods
 import mock_github_responses
+import githubOauth
+import models
 import app as wholeApp
 from app import app
 from app import socketio

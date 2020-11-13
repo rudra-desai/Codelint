@@ -129,7 +129,6 @@ export default function App() {
 
     return (
         <div className="body">
-
             <div className="github">
                 <div className="user">{user}</div>
                 <GithubOauth />

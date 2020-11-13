@@ -23,8 +23,9 @@ def lint_code(data):
 
 def eslint(linter, filename):
     result = subprocess.run(['./node_modules/.bin/eslint', '-f', 'html', f'./userfiles/{filename}'],
-                            stdout=subprocess.PIPE).stdout.decode("utf-8")
+                            stdout=subprocess.PIPE)
 
+    result = result.stdout.decode("utf-8")
     result = result.replace('style="display:none"', 'style="display:table-row"')
     result = re.sub(r'\[\+\].*.js', 'eslint', result)
     return {
@@ -36,9 +37,12 @@ def eslint(linter, filename):
 def pylint(linter, filename):
     ps = subprocess.Popen(('pylint', f'./userfiles/{filename}'), stdout=subprocess.PIPE)
     result = subprocess.check_output(('pylint-json2html'), stdin=ps.stdout).decode("utf-8")
-    result = re.sub(r'<h2>Metrics<\/h2>(?s).*', '', result)
-    result = re.sub(r'<h1>Pylint report from report.jinja2(?s).+?<\/h3>', '', result)
-    result = re.sub(r'(<tr>(?s).+?<\/tr>)(?s).+?<td>1<\/td>(?s).+?Module name.+?<\/tr>', r'\g<1> ', result)
+    try:
+        result = re.sub(r'<h2>Metrics<\/h2>(?s).*', '', result)
+        result = re.sub(r'<h1>Pylint report from report.jinja2(?s).+?<\/h3>', '', result)
+        result = re.sub(r'(<tr>(?s).+?<\/tr>)(?s).+?<td>1<\/td>(?s).+?Module name.+?<\/tr>', r'\g<1> ', result)
+    except Exception as e:
+        print(e)
 
     return {
         'linter': linter,

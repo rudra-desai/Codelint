@@ -11,7 +11,7 @@ socketio = flask_socketio.SocketIO(app)
 socketio.init_app(app, cors_allowed_origins="*")
 
 states = set()
-
+import models
 @app.route('/')
 def main():
     return flask.render_template('index.html')
@@ -41,6 +41,9 @@ def on_auth_user(data):
     state = data['state']
     if state not in states:
         print(f'state: {state} does not match any waiting states')
+        socketio.emit('failure', {
+            'message':  f'state: {state} does not match any waiting states'
+        })
     else:
         auth_user(code, state)
         socketio.emit('user data', get_user_data(request.sid))
@@ -65,7 +68,6 @@ def code(data):
     subprocess.run(['rm', '-r', f'./userfiles/{res["filename"]}'])
 
 if __name__ == '__main__':
-    import models
     models.db.create_all()
     socketio.run(
         app,
