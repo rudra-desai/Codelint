@@ -1,4 +1,4 @@
-# EZLint - A browser based linter
+# Codelint - A browser based linter
 
 - To run **frontend**: `npm run dev`
     - Alternatively use `npm run watch` if on AWS cloud9
