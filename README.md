@@ -1,5 +1,7 @@
 # Codelint - A browser based linter
 
+[Heroku App](http://codelint.herokuapp.com/)
+
 - To run **frontend**: `npm run dev`
     - Alternatively use `npm run watch` if on AWS cloud9
 - To run **backend**: `python app.py`
