@@ -63,7 +63,7 @@ def on_get_repos():
 @socketio.on('get repo tree')
 def on_get_repo_tree(data):
     socketio.emit('repo tree', get_user_repo_tree(request.sid,
-                                                  data['repo_url']), request.sid)
+                                                  data['repo_url'], data['default_branch']), request.sid)
 
 
 @socketio.on('get file contents')

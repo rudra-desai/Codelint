@@ -64,18 +64,19 @@ def get_user_repos(user_id):
     repos = repos.json()
     return {
         'repos': [(repo['name'], repo['url']) for repo in repos],
+        'default_branch': repo['default_branch'],
         'error': None
     }
 
 
-def get_user_repo_tree(user_id, repo_url):
+def get_user_repo_tree(user_id, repo_url, default_branch):
     user_access_token = models.Users.query.filter_by(
         sid=user_id).first().access_token
     headers = {
         'Authorization': 'token ' + user_access_token,
         'Accept': 'application/vnd.github.v3+json'
     }
-    repo_url = repo_url + '/commits/master'
+    repo_url = repo_url + '/commits/' + default_branch
     repo = requests.get(repo_url, headers=headers)
     if repo.status_code == 403:
         return {'tree': None, 'error': 'bad github token'}
