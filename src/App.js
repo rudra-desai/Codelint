@@ -97,12 +97,16 @@ export default function App() {
 
   const handleSelectedRepo = ({ value }) => {
     setSelectedRepo(value);
-    allRepoInfo.forEach(([repo_name, url]) => {
+    console.log(allRepoInfo);
+    allRepoInfo.forEach(([repo_name, url, default_branch]) => {
+      console.log(repo_name);
+      console.log(url);
+      console.log(default_branch);
       if (value === repo_name) {
         if (url.includes(user)) {
           Socket.emit('get repo tree', {
             repo_url: url,
-            default_branch: defaultBranch
+            default_branch: default_branch,
           });
         }
       }
