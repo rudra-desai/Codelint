@@ -64,7 +64,8 @@ class unmocked(unittest.TestCase):
         with patch('app.get_user_repo_tree') as mock_method:
             mock_method.return_value = mock_github_responses.tree_return
             socketio_test_client.emit('get repo tree', {
-                'repo_url': 'https://api.github.com/repos/AnthonyTudorov/BST-and-AVL-Tree-Comparison'
+                'repo_url': 'https://api.github.com/repos/AnthonyTudorov/BST-and-AVL-Tree-Comparison',
+                'default_branch': 'master'
             })
             res = socketio_test_client.get_received()[1]["args"][0]["tree"][0]
             self.assertEqual(res, expected_res)

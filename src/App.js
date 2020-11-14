@@ -22,7 +22,6 @@ export default function App() {
   const [repoTree, setRepoTree] = useState([]);
   const [repoTreeFiles, setRepoTreeFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState('');
-  const [defaultBranch, setDefaultBranch] = useState('');
 
   useEffect(() => {
     Socket.on('user data', ({ login }) => {
@@ -31,10 +30,9 @@ export default function App() {
       Socket.emit('get repos');
     });
 
-    Socket.on('repos', ({ repos, default_branch }) => {
+    Socket.on('repos', ({ repos }) => {
       setRepos(repos.map(([elem]) => elem));
       setAllRepoInfo(repos);
-      setDefaultBranch(default_branch);
     });
 
     Socket.on('repo tree', (data) => {
@@ -97,13 +95,13 @@ export default function App() {
 
   const handleSelectedRepo = ({ value }) => {
     setSelectedRepo(value);
-    console.log(allRepoInfo);
     allRepoInfo.forEach(([repo_name, url, default_branch]) => {
       console.log(repo_name);
       console.log(url);
       console.log(default_branch);
       if (value === repo_name) {
         if (url.includes(user)) {
+          console.log(default_branch);
           Socket.emit('get repo tree', {
             repo_url: url,
             default_branch: default_branch,

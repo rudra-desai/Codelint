@@ -67,7 +67,8 @@ class mocked(unittest.TestCase):
     def test_success_get_user_repo_tree(self):
         INPUT = {
             'user_id': 1234,
-            'repo_url': 'https://api.github.com/repos/rudra-desai/Codelint'
+            'repo_url': 'https://api.github.com/repos/rudra-desai/Codelint',
+            'default_branch': 'master'
         }
         OUTPUT = mock_github_responses.tree_return
         with patch('models.Users', mock_methods.mock_users), patch('requests.get', mock_methods.mock_success_request_get):
@@ -77,7 +78,8 @@ class mocked(unittest.TestCase):
     def test_failure_get_user_repo_tree(self):
         INPUT = {
             'user_id': 1234,
-            'repo_url': 'https://api.github.com/repos/rudra-desai/Codelint'
+            'repo_url': 'https://api.github.com/repos/rudra-desai/Codelint',
+            'default_branch': 'master'
         }
         OUTPUT = {'tree': None, 'error': 'bad github token'}
         with patch('models.Users', mock_methods.mock_users), patch('requests.get', mock_methods.mock_failure_request_get):
