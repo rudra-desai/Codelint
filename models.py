@@ -4,7 +4,7 @@ from settings import db
 class Users(db.Model):
     '''Main class that handles our db columns'''
     id = db.Column(db.Integer, primary_key=True)
-    login = db.Column(db.String(120), unique=True, nullable=False)
+    login = db.Column(db.String(120), nullable=False)
     name = db.Column(db.String(120))
     email = db.Column(db.String(120))
     profile_image = db.Column(db.String(120))

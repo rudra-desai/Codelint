@@ -49,10 +49,10 @@ def on_auth_user(data):
         print(f'state: {state} does not match any waiting states')
         socketio.emit(
             'failure',
-            {'message': f'state: {state} does not match any waiting states'})
+            {'message': f'state: {state} does not match any waiting states'}, request.sid)
     else:
         auth_user(github_code, state)
-        socketio.emit('user data', get_user_data(request.sid))
+        socketio.emit('user data', get_user_data(request.sid), request.sid)
 
 
 @socketio.on('get repos')
@@ -63,20 +63,20 @@ def on_get_repos():
 @socketio.on('get repo tree')
 def on_get_repo_tree(data):
     socketio.emit('repo tree', get_user_repo_tree(request.sid,
-                                                  data['repo_url']))
+                                                  data['repo_url']), request.sid)
 
 
 @socketio.on('get file contents')
 def on_get_file_contents(data):
     print(data["content_url"])
     socketio.emit('file contents',
-                  get_user_file_contents(request.sid, data['content_url']))
+                  get_user_file_contents(request.sid, data['content_url']), request.sid)
 
 
 @socketio.on('lint')
 def code(data):
     res = lint_code(data)
-    socketio.emit('output', res, room=request.sid)
+    socketio.emit('output', res, request.sid)
     subprocess.run(['rm', '-r', f'./userfiles/{res["filename"]}'])
 
 
