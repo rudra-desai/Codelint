@@ -1,3 +1,4 @@
+'''Setting up basic config for out db'''
 import os
 import flask
 from dotenv import load_dotenv
