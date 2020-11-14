@@ -80,6 +80,7 @@ def get_user_repo_tree(user_id, repo_url):
     if repo.status_code == 403:
         return {'tree': None, 'error': 'bad github token'}
     repo = repo.json()
+    print(repo)
     params = {'recursive': True}
     tree = requests.get(repo['commit']['tree']['url'],
                         params=params,
