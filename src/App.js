@@ -13,7 +13,7 @@ export default function App() {
   const [linter, setLinter] = useState('');
   const [errors, setErrors] = useState('');
   const [selectLinterError, setSelectLinterError] = useState('');
-  const [, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
   const [repos, setRepos] = useState([]);
@@ -124,7 +124,7 @@ export default function App() {
     <div className="body">
       <div className="github">
         <div className="user">{user}</div>
-        <GithubOauth />
+        {!isLoggedIn && <GithubOauth />}
       </div>
       <Top
         handleSelectedRepo={handleSelectedRepo}
