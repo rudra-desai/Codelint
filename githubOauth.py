@@ -63,8 +63,7 @@ def get_user_repos(user_id):
 
     repos = repos.json()
     return {
-        'repos': [(repo['name'], repo['url']) for repo in repos],
-        'default_branch': repo['default_branch'],
+        'repos': [(repo['name'], repo['url'], repo['default_branch']) for repo in repos],
         'error': None
     }
 
@@ -81,7 +80,6 @@ def get_user_repo_tree(user_id, repo_url, default_branch):
     if repo.status_code == 403:
         return {'tree': None, 'error': 'bad github token'}
     repo = repo.json()
-    print(repo)
     params = {'recursive': True}
     tree = requests.get(repo['commit']['tree']['url'],
                         params=params,
