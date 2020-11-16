@@ -43,5 +43,5 @@
 - Combine database and with Anthony's github oauth work
 - Import db to back-end and connect server calls to database
 
-## Things left to finish
+#### Things left to finish
 - Implement a fix button for eslint that would automatically fix some errors in the code inputted by the user
