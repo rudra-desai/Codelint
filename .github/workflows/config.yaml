@@ -1,6 +1,6 @@
 name: Run unit tests and deploy to Heroku
 
-on: [push]
+on: [pull_requests]
 
 jobs:
   heroku:
